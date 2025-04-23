@@ -97,21 +97,24 @@ final class ProcessImpl extends Process {
     private static LaunchMechanism launchMechanism() {
         String s = GetPropertyAction.privilegedGetProperty("jdk.lang.Process.launchMechanism");
         if (s == null) {
-            return LaunchMechanism.POSIX_SPAWN;
+            // Force FORK when is HAIKU
+            if (OperatingSystem.isHaiku())
+                return LaunchMechanism.FORK;
+            else
+                return LaunchMechanism.POSIX_SPAWN;
         }
 
         try {
             // Should be value of a LaunchMechanism enum
             LaunchMechanism lm = LaunchMechanism.valueOf(s.toUpperCase(Locale.ROOT));
             switch (OperatingSystem.current()) {
-                case LINUX:
-                    return lm;      // All options are valid for Linux
-                case AIX:
                 case HAIKU:
                     if (lm != LaunchMechanism.POSIX_SPAWN) {
-                        return lm; // All but POSIX_SPAWN are valid
+                        return lm; // POSIX_SPAWN isn't supported on HAIKU
                     }
-                    break;
+                case LINUX:
+                case AIX:
+                    return lm;
                 case MACOS:
                     if (lm != LaunchMechanism.VFORK) {
                         return lm; // All but VFORK are valid

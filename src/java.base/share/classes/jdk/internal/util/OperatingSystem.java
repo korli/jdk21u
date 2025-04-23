@@ -126,11 +126,9 @@ public enum OperatingSystem {
      * {@return {@code true} if built for the Haiku operating system}
      */
     @ForceInline
-    /* public static boolean isHaiku() {
+    public static boolean isHaiku() {
         return PlatformProps.TARGET_OS_IS_HAIKU;
     }
-    */
-
 
     /**
      * {@return the current operating system}
