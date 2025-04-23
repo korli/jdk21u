@@ -33,26 +33,6 @@ import java.util.Locale;
  * Supported OperatingSystem and Architecture.
  */
 public record Platform(OperatingSystem os, Architecture arch) {
-
-    public enum OperatingSystem {
-        WINDOWS,
-        LINUX,
-        MACOS,
-        AIX,
-        HAIKU,
-        UNKNOWN;
-    }
-
-    public enum Architecture {
-        X86,
-        x64,
-        ARM,
-        AARCH64,
-        UNKNOWN;
-    }
-
-    public static final Platform UNKNOWN = new Platform(OperatingSystem.UNKNOWN, Architecture.UNKNOWN);
-
     /*
      * Returns the {@code Platform} based on the platformString of the form <operating system>-<arch>.
      * @throws IllegalArgumentException if the delimiter is missing or either OS or

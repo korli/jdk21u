@@ -1115,6 +1115,13 @@ void os::pd_realign_memory(char *addr, size_t bytes, size_t alignment_hint) {
 void os::pd_free_memory(char *addr, size_t bytes, size_t alignment_hint) {
 }
 
+julong os::free_memory() {
+  return Haiku::available_memory();
+}
+
+void os::jfr_report_memory_info() {
+}
+
 bool os::pd_uncommit_memory(char* addr, size_t size, bool exec) {
   uintptr_t res = (uintptr_t) ::mmap(addr, size, PROT_NONE,
                 MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0);
@@ -1234,9 +1241,13 @@ int os::numa_get_group_id_for_address(const void* address) {
   return 0;
 }
 
-bool os::get_page_info(char *start, page_info* info) {
+bool os::numa_get_group_ids_for_range(const void** addresses, int* lgrp_ids, size_t count) {
   return false;
 }
+
+//bool os::get_page_info(char *start, page_info* info) {
+//  return false;
+//}
 
 char *os::scan_pages(char *start, char* end, page_info* page_expected, page_info* page_found) {
   return end;

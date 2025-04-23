@@ -108,7 +108,9 @@ final class ProcessImpl extends Process {
                     return lm;      // All options are valid for Linux
                 case AIX:
                 case HAIKU:
-                    return HAIKU(LaunchMechanism.FORK, LaunchMechanism.VFORK);
+                    if (lm != LaunchMechanism.POSIX_SPAWN) {
+                        return lm; // All but POSIX_SPAWN are valid
+                    }
                     break;
                 case MACOS:
                     if (lm != LaunchMechanism.VFORK) {
@@ -331,7 +333,6 @@ final class ProcessImpl extends Process {
     void initStreams(int[] fds, boolean forceNullOutputStream) throws IOException {
         switch (OperatingSystem.current()) {
             case LINUX:
-            case BSD:
             case HAIKU:
                 stdin = (fds[0] == -1) ?
                         ProcessBuilder.NullOutputStream.INSTANCE :

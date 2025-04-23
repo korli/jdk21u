@@ -569,6 +569,12 @@ void os::print_register_info(outputStream *st, const void *context) {
   st->cr();
 }
 
+void
+os::print_register_info(outputStream *st, const void *context, int& continuation)
+{
+    os::print_register_info(st, context, continuation);
+}
+
 void os::setup_fpu() {
 #ifndef AMD64
   address fpu_cntrl = StubRoutines::addr_fpu_cntrl_wrd_std();
