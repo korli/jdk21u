@@ -1115,6 +1115,10 @@ void os::pd_realign_memory(char *addr, size_t bytes, size_t alignment_hint) {
 void os::pd_free_memory(char *addr, size_t bytes, size_t alignment_hint) {
 }
 
+size_t os::pd_pretouch_memory(void* first, void* last, size_t page_size) {
+  return page_size;
+}
+
 julong os::free_memory() {
   return Haiku::available_memory();
 }
@@ -1136,6 +1140,28 @@ char* os::pd_reserve_memory(size_t bytes, bool exec) {
 bool os::pd_release_memory(char* addr, size_t size) {
   return anon_munmap(addr, size);
 }
+
+bool os::pd_dll_unload(void* libhandle, char* ebuf, int ebuflen) {
+  if (ebuf && ebuflen > 0) {
+    ebuf[0] = '\0';
+    ebuf[ebuflen - 1] = '\0';
+  }
+
+  bool res = (0 == ::dlclose(libhandle));
+  if (!res) {
+    // error analysis when dlopen fails
+    const char* error_report = ::dlerror();
+    if (error_report == NULL) {
+      error_report = "dlerror returned no error description";
+    }
+    if (ebuf != NULL && ebuflen > 0) {
+      snprintf(ebuf, ebuflen - 1, "%s", error_report);
+    }
+  }
+
+  return res;
+} // end: os::pd_dll_unload()
+
 
 // Set protections specified
 bool os::protect_memory(char* addr, size_t bytes, ProtType prot,
@@ -1871,11 +1897,11 @@ bool os::start_debugging(char *buf, int buflen) {
 // Check if a directory is empty
 bool os::dir_is_empty(const char* path) {
   DIR* dir = opendir(path);
-  if (dir == nullptr) {
+  if (dir == NULL) {
     return false; // Assume non-empty or error
   }
   struct dirent* entry;
-  while ((entry = readdir(dir)) != nullptr) {
+  while ((entry = readdir(dir)) != NULL) {
     if (strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
       closedir(dir);
       return false; // Found a non-dot entry
@@ -1886,3 +1912,6 @@ bool os::dir_is_empty(const char* path) {
 }
 
 void os::print_memory_mappings(char* addr, size_t bytes, outputStream* st) {}
+
+void os::prepare_native_symbols() {
+}

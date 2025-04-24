@@ -27,6 +27,8 @@ public class OSUtils {
     public static final boolean IS_CYGWIN =
             IS_WINDOWS && System.getenv("PWD") != null && System.getenv("PWD").startsWith("/");
 
+    public static final boolean IS_HAIKU = System.getProperty("os.name").toLowerCase().equals("haiku");
+
     @Deprecated
     public static final boolean IS_MINGW = IS_WINDOWS
             && System.getenv("MSYSTEM") != null
@@ -45,10 +47,6 @@ public class OSUtils {
 
     public static final boolean IS_CONEMU = IS_WINDOWS
             && System.getenv("ConEmuPID") != null;
-
-    public static final boolean IS_OSX = System.getProperty("os.name").toLowerCase().contains("mac");
-    public static final boolean IS_AIX = System.getProperty("os.name").equals("AIX");
-    public static final boolean IS_HAIKU = System.getProperty("os.name").toLowerCase().equals("haiku");
 
     public static String TTY_COMMAND;
     public static String STTY_COMMAND;

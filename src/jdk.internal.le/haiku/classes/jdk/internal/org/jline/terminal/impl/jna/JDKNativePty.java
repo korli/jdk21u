@@ -27,16 +27,17 @@ package jdk.internal.org.jline.terminal.impl.jna;
 import java.io.IOException;
 import jdk.internal.org.jline.terminal.Attributes;
 import jdk.internal.org.jline.terminal.Size;
+import jdk.internal.org.jline.terminal.spi.SystemStream;
 import jdk.internal.org.jline.terminal.spi.TerminalProvider;
 
 class JDKNativePty {
 
-    static JnaNativePty current(TerminalProvider.Stream console) throws IOException {
+    static JnaNativePty current(TerminalProvider provider, SystemStream systemStream) throws IOException {
         // return OsXNativePty.current(console);
         throw new UnsupportedOperationException("Not supported");
     }
 
-    static JnaNativePty open(Attributes attr, Size size) throws IOException {
+    static JnaNativePty open(TerminalProvider provider, Attributes attr, Size size) throws IOException {
         // return OsXNativePty.open(attr, size);
         throw new UnsupportedOperationException("Not supported");
     }

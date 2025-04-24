@@ -197,6 +197,8 @@ size_t os::lasterror(char *buf, size_t len) {
 ////////////////////////////////////////////////////////////////////////////////
 // breakpoint support
 
+#ifndef __HAIKU__
+
 void os::breakpoint() {
   BREAKPOINT;
 }
@@ -206,7 +208,6 @@ extern "C" void breakpoint() {
 }
 
 // Return true if user is running as root.
-#ifndef __HAIKU__
 
 bool os::have_special_privileges() {
   static bool privileges = (getuid() != geteuid()) || (getgid() != getegid());
@@ -848,6 +849,8 @@ void os::_exit(int num) {
   ALLOW_C_FUNCTION(::_exit, ::_exit(num);)
 }
 
+#ifndef __HAIKU__
+
 bool os::dont_yield() {
   return DontYieldALot;
 }
@@ -855,6 +858,8 @@ bool os::dont_yield() {
 void os::naked_yield() {
   sched_yield();
 }
+
+#endif
 
 // Builds a platform dependent Agent_OnLoad_<lib_name> function name
 // which is used to find statically linked in agents.
